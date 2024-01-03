@@ -1,0 +1,516 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
+import time
+import pandas as pd
+import csv
+
+
+
+
+
+
+
+profile_links = [
+   "https://www.linkedin.com/in/kiran-ameen-8a8a0267/",
+    "https://www.linkedin.com/in/faraz-aly-19479284/",
+    "https://www.linkedin.com/in/rashid-suri-42228b1b/",
+    "https://www.linkedin.com/in/shakeel-naseem-b8b66411a/",
+    "https://www.linkedin.com/in/sehreen-sadiq-37a6ba80/",
+    "https://www.linkedin.com/in/arena-multimedia-bahadurabad-19845467/",
+    "https://www.linkedin.com/in/maryam-tariq-25b168132/",
+    "https://www.linkedin.com/in/arena-multimedia-hyderabad-43b0991a9/",
+    "https://www.linkedin.com/in/m-khan-0ab7a1a4/",
+    "https://www.linkedin.com/in/kiran-hina-3247991b/",
+    "https://www.linkedin.com/in/faizahmedfarooq/",
+    "https://www.linkedin.com/in/ayesha-ashraf-6a926780/",
+    "https://www.linkedin.com/in/javeria-shahzad-605042bb/",
+    "https://www.linkedin.com/in/humera-rafiq-540852/",
+    "https://www.linkedin.com/in/reema-ashraf-3436097b/",
+    "https://www.linkedin.com/in/jaziba-sahar-ab785871/",
+    "https://www.linkedin.com/in/daniyalakhter93/",
+    "https://www.linkedin.com/in/asiya-rehmat-9a574a197/",
+    "https://www.linkedin.com/in/sharjeel-ahmed-7a983668/",
+    "https://www.linkedin.com/in/asma-umar-685023196/",
+    "https://www.linkedin.com/in/nida-ansari-98754b60/",
+    "https://www.linkedin.com/in/arena-multimedia-gulistan-e-jauhar-3512061a0/",
+    "https://www.linkedin.com/in/muhammad-usman-b8a7b2105/",
+    "https://www.linkedin.com/in/tooba-ahmed-605021196/",
+    "https://www.linkedin.com/in/sehrish-khan-649098b3/",
+    "https://www.linkedin.com/in/danish-ali-658a69120/",
+    "https://www.linkedin.com/in/adeel-masoom-875180152/",
+    "https://www.linkedin.com/in/aishah-farahh-b6b35b140/",
+    "https://www.linkedin.com/in/noor-ul-ain-sadaf-5a307a10b/",
+    "https://www.linkedin.com/in/sunny-k-90747689/",
+    "https://www.linkedin.com/in/imran-shahzad-16338992/",
+    "https://www.linkedin.com/in/rayyan-waseem-72729513a/",
+    "https://www.linkedin.com/in/ifrah-khan-20b157167/",
+    "https://www.linkedin.com/in/muhammad-usama-955450110/",
+    "https://www.linkedin.com/in/agha-fahad-waris-9a02b08a/",
+    "https://www.linkedin.com/in/alishan-waseem-67842a79/",
+    "https://www.linkedin.com/in/mubashir-shah-055b7984/",
+    "https://www.linkedin.com/in/anum-arif-5130b041/",
+    "https://www.linkedin.com/in/nayab-umer/",
+    "https://www.linkedin.com/in/princess-jan-59250638/",
+    "https://www.linkedin.com/in/tayyab-aurangzaib-678026ba/",
+    "https://www.linkedin.com/in/princess-aoj-72311634/",
+    "https://www.linkedin.com/in/webwidemedia/",
+    "https://www.linkedin.com/in/mohammad-imran-7211723a/",
+    "https://www.linkedin.com/in/irsa-anjum-72790718b/",
+    "https://www.linkedin.com/in/rao-anam-ali-81623a76/",
+    "https://www.linkedin.com/in/noor-noor-505135205/",
+    "https://www.linkedin.com/in/hasanaveed/",
+    "https://www.linkedin.com/in/urooj-kabir-72450859/",
+    "https://www.linkedin.com/in/farhan-noorani-a5b03715/",
+    "https://www.linkedin.com/in/arsalan-amil-20479828/",
+    "https://www.linkedin.com/in/syedhamzaali01/",
+    "https://www.linkedin.com/in/anita-kabiruddin-42032193/",
+    "https://www.linkedin.com/in/kanwal-hussain-b8b97943/",
+    "https://www.linkedin.com/in/shariq-hussain-29490ab/",
+    "https://www.linkedin.com/in/ayush-chauhan-a8b2b951/",
+    "https://www.linkedin.com/in/zubair-shaikh-a6251163/",
+    "https://www.linkedin.com/in/adeel-arif-315993185/",
+    "https://www.linkedin.com/in/muhammad-ali-71344365/",
+    "https://www.linkedin.com/in/hadia-afsar-b0b4a2131/",
+    "https://www.linkedin.com/in/wajiha-ali-217963149/",
+    "https://www.linkedin.com/in/muhammad-zakir-a6550418/",
+    "https://www.linkedin.com/in/maaz-qureshi-15b01246/",
+    "https://www.linkedin.com/in/arena-multimedia-johar-town-lahore-311261154/",
+    "https://www.linkedin.com/in/madiha-iqbal-65496542/",
+    "https://www.linkedin.com/in/syeda-sumaira-7b349616b/",
+    "https://www.linkedin.com/in/muhammad-adnan-dawoodi-17ab5941/",
+    "https://www.linkedin.com/in/naveed-israil-31151b23/",
+    "https://www.linkedin.com/in/umber-saeed-949561154/",
+    "https://www.linkedin.com/in/tooba-iftikhar-798957105/",
+    "https://www.linkedin.com/in/syed-hassaan-b4362a8a/",
+    "https://www.linkedin.com/in/sarwat-bano-242aa411/",
+    "https://www.linkedin.com/in/arif-rasool-6081005/",
+    "https://www.linkedin.com/in/ahmad-jibriel-592a9a10b/",
+    "https://www.linkedin.com/in/syed-sohail-ahmed-tirmizi-a66671133/",
+    "https://www.linkedin.com/in/khurram-shahzad-57301826/",
+    "https://www.linkedin.com/in/kabeer-shaikh-2458b0179/",
+    "https://www.linkedin.com/in/marium-ali-6b504552/",
+    "https://www.linkedin.com/in/salma-hussain-359220162/",
+    "https://www.linkedin.com/in/jaweria-khalid-2a854867/",
+    "https://www.linkedin.com/in/muhammad-naeem-070a4839/",
+    "https://www.linkedin.com/in/syed-mubashir-ali-qadri-25148978/",
+    "https://www.linkedin.com/in/syed-shahzaib-1a870457/",
+    "https://www.linkedin.com/in/masroor-ali-shah-37708715/",
+    "https://www.linkedin.com/in/muhammadadilkhan/",
+    "https://www.linkedin.com/in/arbish-khan-020818156/",
+    "https://www.linkedin.com/in/khunsa-iqbal-339126115/",
+    "https://www.linkedin.com/in/aman-ali-3907a126/",
+    "https://www.linkedin.com/in/fawad-rajput-2b8b30130/",
+    "https://www.linkedin.com/in/salman-khan-988877a9/",
+    "https://www.linkedin.com/in/sufiyan-baig-24b999125/",
+    "https://www.linkedin.com/in/nabeel-rajput-b04688121/",
+    "https://www.linkedin.com/in/urooj-rashid-bb0b3950/",
+    "https://www.linkedin.com/in/tasleem-khan-80822b115/",
+    "https://www.linkedin.com/in/junaid-mehmood-08424b108/",
+    "https://www.linkedin.com/in/faizan-farooqi-85b133119/",
+    "https://www.linkedin.com/in/sohail-bukhari-bb921754/",
+    "https://www.linkedin.com/in/matiullahr/",
+    "https://www.linkedin.com/in/faisal-soomro-9b112231/",
+    "https://www.linkedin.com/in/sam-jillani-43195063/",
+    "https://www.linkedin.com/in/m-kamran-shafique-673b95104/",
+    "https://www.linkedin.com/in/haris-mushtaq-03aa59113/",
+    "https://www.linkedin.com/in/mustafahashmy/",
+    "https://www.linkedin.com/in/inam-baloch-1a059414a/",
+    "https://www.linkedin.com/in/usama-khan-19ab38109/",
+    "https://www.linkedin.com/in/zubair-khan-62888b2a/",
+    "https://www.linkedin.com/in/fahad-altafi-16090586/",
+    "https://www.linkedin.com/in/ali-mehdi-693a788a/",
+    "https://www.linkedin.com/in/moin-azeem-43787793/",
+    "https://www.linkedin.com/in/khizar-hashmi-9b683a28/",
+    "https://www.linkedin.com/in/nisha-purabiya-b483b4204/",
+    "https://www.linkedin.com/in/hina-ahmed-5b936b72/",
+    "https://www.linkedin.com/in/syeda-aiman-38144a67/",
+    "https://www.linkedin.com/in/faisal-waheed-336653106/",
+    "https://www.linkedin.com/in/lubna-lubna-arena-1b7b3541/",
+    "https://www.linkedin.com/in/danish-ahmed-2269a0198/",
+    "https://www.linkedin.com/in/ahmed-raza-7b84271aa/",
+    "https://www.linkedin.com/in/tariq-habib-64b0453a/",
+    "https://www.linkedin.com/in/wajahat-ali-bhatti-44430334/",
+    "https://www.linkedin.com/in/humera-farhan-6261151a0/",
+    "https://www.linkedin.com/in/danish-ali-khan-667312b8/",
+    "https://www.linkedin.com/in/itechsolutioninfo/",
+    "https://www.linkedin.com/in/talha-ijaz-99b923132/",
+    "https://www.linkedin.com/in/hira-ayyaz-65bb941a1/",
+    "https://www.linkedin.com/in/shumaila-afreen-a1a9bb14b/",
+    "https://www.linkedin.com/in/muhammad-ahmad-animation/",
+    "https://www.linkedin.com/in/muhammad-haseeb-shaikh-949b10140/",
+    "https://www.linkedin.com/in/uxair-ahmed-nawab-62458690/",
+    "https://www.linkedin.com/in/arena-animation-dwarka-173279128/",
+    "https://www.linkedin.com/in/irfan-ali-278a27115/",
+    "https://www.linkedin.com/in/mohammad-obair-khan-25415976/",
+    "https://www.linkedin.com/in/syed-wajahat-b0114715a/",
+    "https://www.linkedin.com/in/ayesha-khalid-a92894131/",
+    "https://www.linkedin.com/in/ariba-siddiqui-112280a1/",
+    "https://www.linkedin.com/in/ankit-malviya/",
+    "https://www.linkedin.com/in/mohammad-faizan-2b3161167/",
+    "https://www.linkedin.com/in/rafah-jano-4274222a/",
+    "https://www.linkedin.com/in/fareha-naeem-bbb79354/",
+    "https://www.linkedin.com/in/muhammad-ali-a0931870/",
+    "https://www.linkedin.com/in/salman-malick-348666170/",
+    "https://www.linkedin.com/in/saqib-rehman-a62969128/",
+    "https://www.linkedin.com/in/phatnguyenhuu/",
+    "https://www.linkedin.com/in/huriya-nadeem-24186830/",
+    "https://www.linkedin.com/in/umer-sheikh-22511977/",
+    "https://www.linkedin.com/in/haris-mirza-934a70101/",
+    "https://www.linkedin.com/in/hina-aleem-31521158/",
+    "https://www.linkedin.com/in/ather-ather-6991941/",
+    "https://www.linkedin.com/in/ashar-khan-4581519a/",
+    "https://www.linkedin.com/in/shafaq-islam-6864b3142/",
+    "https://www.linkedin.com/in/kashan-khan-7a716815b/",
+    "https://www.linkedin.com/in/mubeen-nizam-b734b080/",
+    "https://www.linkedin.com/in/aimen-arif-a1b363178/",
+    "https://www.linkedin.com/in/muhammad-saad-476677198/",
+    "https://www.linkedin.com/in/quratulain-iqbal-426b7810a/",
+    "https://www.linkedin.com/in/noureen-c-581b3a190/",
+    "https://www.linkedin.com/in/arena-riyadh-447209151/",
+    "https://www.linkedin.com/in/khalid-khan-378b7743/",
+    "https://www.linkedin.com/in/prodigitalbusiness/",
+    "https://www.linkedin.com/in/iram-naveed-7902913b/",
+    "https://www.linkedin.com/in/jazib-khan-4b64b7149/",
+    "https://www.linkedin.com/in/junaid-lateef-b773b523/",
+    "https://www.linkedin.com/in/rahiim-khan-986948160/",
+    "https://www.linkedin.com/in/simon-ng-ang-a-a8803087/",
+    "https://www.linkedin.com/in/saad-khan-b38809120/",
+    "https://www.linkedin.com/in/waleed-balushi-602565151/",
+    "https://www.linkedin.com/in/rana-kaleem-7b4951a9/",
+    "https://www.linkedin.com/in/vipinder-gupta-30421510b/",
+    "https://www.linkedin.com/in/mazhar-fazal-57a38366/",
+    "https://www.linkedin.com/in/syed-muhammad-monis-56836310a/",
+    "https://www.linkedin.com/in/munir-procreations-9b129420b/",
+    "https://www.linkedin.com/in/lubna-omar-08161a121/",
+    "https://www.linkedin.com/in/abdul-rehman-90b855a6/",
+    "https://www.linkedin.com/in/sunil-saleem-a25512145/",
+    "https://www.linkedin.com/in/sashanminh/",
+    "https://www.linkedin.com/in/khalid-khan-77504955/",
+    "https://www.linkedin.com/in/faran-khizar-672b43158/",
+    "https://www.linkedin.com/in/mirza-technical-b46bb2178/",
+    "https://www.linkedin.com/in/zeeshan-aalam-1b6242200/",
+    "https://www.linkedin.com/in/hadia-a-a0a237114/",
+    "https://www.linkedin.com/in/obaid-mahmood-54294a91/",
+    "https://www.linkedin.com/in/sabbasofficial/",
+    "https://www.linkedin.com/in/shonam-rani-ba8476a0/",
+    "https://www.linkedin.com/in/danish-khan-a33636b/",
+    "https://www.linkedin.com/in/junaid-lateef-arena-62a63926/",
+    "https://www.linkedin.com/in/shabbir-bhinderwala-48a66978/",
+    "https://www.linkedin.com/in/yusra-shafique-97a88412a/",
+    "https://www.linkedin.com/in/kanwal-mahar-45740a116/",
+    "https://www.linkedin.com/in/engr-kashif-ali-848003160/",
+    "https://www.linkedin.com/in/vimal-kumar-09a22095/",
+    "https://www.linkedin.com/in/bilal-ahmed-77457688/",
+    "https://www.linkedin.com/in/ghazifa-khan-ab747463/",
+    "https://www.linkedin.com/in/arenamultimedia-johartownlahore-763843194/",
+    "https://www.linkedin.com/in/syed-muhammed-kaleem-2896a2138/",
+    "https://www.linkedin.com/in/anjali-juneja-18a51972/",
+    "https://www.linkedin.com/in/nguy%E1%BB%85n-v%C4%83n-h%E1%BA%A3i-2a0b12120/",
+    "https://www.linkedin.com/in/sued-monis-hussain-93b259b3/",
+    "https://www.linkedin.com/in/ali-saad-6b1a8b141/",
+    "https://www.linkedin.com/in/ali-ahmed-2a38bb177/",
+    "https://www.linkedin.com/in/lnhnguyen92/",
+    "https://www.linkedin.com/in/dawood-hassan-931ab0138/",
+    "https://www.linkedin.com/in/h%C3%A0-my-60503497/",
+    "https://www.linkedin.com/in/muhammad-saqib-39aa59127/",
+    "https://www.linkedin.com/in/umer-khan-535a39a9/",
+    "https://www.linkedin.com/in/ayaz-ahmed-22253a107/",
+    "https://www.linkedin.com/in/tabish-anwar-a0a45a50/",
+    "https://www.linkedin.com/in/huong-luong-thu-2109bb96/",
+    "https://www.linkedin.com/in/ahsan-hussain-732b4b1b9/",
+    "https://www.linkedin.com/in/waqar-ali-49199b9/",
+    "https://www.linkedin.com/in/shayan-shoaib/",
+    "https://www.linkedin.com/in/arsalan-qasim-80a87667/",
+    "https://www.linkedin.com/in/muhammad-shahzaib-aslam-12447062/",
+    "https://www.linkedin.com/in/rafay-tanvir-655b5119a/",
+    "https://www.linkedin.com/in/ymca-vietnam-8147602b/",
+    "https://www.linkedin.com/in/creativedesignerr/",
+    "https://www.linkedin.com/in/shahid-shahidkhan-205843a1/",
+    "https://www.linkedin.com/in/maaz-jalil-8154a293/",
+    "https://www.linkedin.com/in/asad-sheikh-8675b3191/",
+    "https://www.linkedin.com/in/zubair-shaikh-46b4b333/",
+    "https://www.linkedin.com/in/mizab-khan-957556159/",
+    "https://www.linkedin.com/in/nafees-fatima-12b12234/",
+    "https://www.linkedin.com/in/muhammad-kashif-222224138/",
+    "https://www.linkedin.com/in/dung-dinh-tri-aa817b8/",
+    "https://www.linkedin.com/in/beos-tran/",
+    "https://www.linkedin.com/in/thanh-thao-nguyen-thi-b015b2a0/",
+    "https://www.linkedin.com/in/nosherwan1410e/",
+    "https://www.linkedin.com/in/muhammad-rafeh-6ab57b177/",
+    "https://www.linkedin.com/in/rabia-khan-a1b8b81b9/",
+    "https://www.linkedin.com/in/alishah-manjee-62920596/",
+    "https://www.linkedin.com/in/umair-abdullah-b2370976/",
+    "https://www.linkedin.com/in/imran-yousif-8822b426/",
+    "https://www.linkedin.com/in/koushik-sikder-614079108/",
+    "https://www.linkedin.com/in/subhra-shankha-dasgupta-bba6a125/",
+    "https://www.linkedin.com/in/adeelshahzadcgartist/",
+    "https://www.linkedin.com/in/duylinh/",
+    "https://www.linkedin.com/in/osama-shaikh-217780130/",
+    "https://www.linkedin.com/in/biswanath-majumder-448518135/",
+    "https://www.linkedin.com/in/mongoo/",
+    "https://www.linkedin.com/in/syed-wahab-711686142/",
+    "https://www.linkedin.com/in/hoanghanhdigil/",
+    "https://www.linkedin.com/in/dattruongduc18121997/",
+    "https://www.linkedin.com/in/nirali-shah-11042a120/",
+    "https://www.linkedin.com/in/samreen-altaf-hussain-89bb58129/",
+    "https://www.linkedin.com/in/quratulain-muhammad-hanif-64198958/",
+    "https://www.linkedin.com/in/kaurm8343/",
+    "https://www.linkedin.com/in/affan-manzoor-7098b2147/",
+    "https://www.linkedin.com/in/sabiha-shahin-90133819/",
+    "https://www.linkedin.com/in/kartik-yadav-83a55472/",
+    "https://www.linkedin.com/in/faraz-jafri-54360233/",
+    "https://www.linkedin.com/in/syed-muhammad-zeeshan-283a2550/",
+    "https://www.linkedin.com/in/afshan-muhammad-altaf-67b331179/",
+    "https://www.linkedin.com/in/son-tung-nguyen-06088451/",
+    "https://www.linkedin.com/in/prashant-chaurasia-1579b1131/",
+    "https://www.linkedin.com/in/van-nam-bui-896476b6/",
+    "https://www.linkedin.com/in/vandana-singh-2bb29416/",
+    "https://www.linkedin.com/in/sakshi-gupta-121620a3/",
+    "https://www.linkedin.com/in/bindu-nair-97320725/",
+    "https://www.linkedin.com/in/parth-ghosh-3582207/",
+    "https://www.linkedin.com/in/neha-singhk-717ba176/",
+    "https://www.linkedin.com/in/arenaagra/",
+    "https://www.linkedin.com/in/radhika-kunsavalikar-24684325/",
+    "https://www.linkedin.com/in/rakesh-rawal-998204110/",
+    "https://www.linkedin.com/in/hemanth-nalli-0a83a132/",
+    "https://www.linkedin.com/in/vivekvarol/",
+    "https://www.linkedin.com/in/krishna-neupane-9b5957a0/",
+    "https://www.linkedin.com/in/dhruba-banerjee-35bbb653/",
+    "https://www.linkedin.com/in/aimen-nisar-32a91917b/",
+    "https://www.linkedin.com/in/arunkuzhalmannam/",
+    "https://www.linkedin.com/in/nguy%E1%BB%85n-yenlex-5943163b/",
+    "https://www.linkedin.com/in/faysal-kamal-kamal-uddin-38256aa7/",
+    "https://www.linkedin.com/in/deepa-ballary-0ab01137/",
+    "https://www.linkedin.com/in/umesh-mishra-9a61ab23/",
+    "https://www.linkedin.com/in/agnibha-roy-7a7758166/",
+    "https://www.linkedin.com/in/shwetha-cj-15a64132/",
+    "https://www.linkedin.com/in/krishnendu-das-29366084/",
+    "https://www.linkedin.com/in/thongala-prasikumar-775a27156/",
+    "https://www.linkedin.com/in/moutushi-ray-chaudhuri-204643b1/",
+    "https://www.linkedin.com/in/milee-saint-60288a173/",
+    "https://www.linkedin.com/in/swati-rajwade-6bab5a13a/",
+    "https://www.linkedin.com/in/ishita-munshi-44911b20/",
+    "https://www.linkedin.com/in/mahua-rb-3a03a7102/",
+    "https://www.linkedin.com/in/huynh-tam-988328171/",
+    "https://www.linkedin.com/in/siddhi-shukla-561651b/",
+    "https://www.linkedin.com/in/pradeep-animation-99085161/",
+    "https://www.linkedin.com/in/pallavi-sidhu-9984ab145/",
+    "https://www.linkedin.com/in/prakash-katari-1a9034133/",
+    "https://www.linkedin.com/in/sahaya-rajesh-bba03a13a/",
+    "https://www.linkedin.com/in/sarthak-mehra-54830261/",
+    "https://www.linkedin.com/in/rian-titus-b19971103/",
+    "https://www.linkedin.com/in/chandan-raj-b95b575a/",
+    "https://www.linkedin.com/in/sunil-s-48628787/",
+    "https://www.linkedin.com/in/debratna-nag-48a747138/",
+    "https://www.linkedin.com/in/dinesh-yarlagadda-5b314567/",
+    "https://www.linkedin.com/in/deepak-gharti-2bb92126/",
+    "https://www.linkedin.com/in/soumya-chakraborty-61119668/",
+    "https://www.linkedin.com/in/yogesh-hire-3468a590/",
+    "https://www.linkedin.com/in/priyanka-choudhary-2b535132/",
+    "https://www.linkedin.com/in/mehar-naz-740a91159/",
+    "https://www.linkedin.com/in/arena-animation-095516186/",
+    "https://www.linkedin.com/in/ravindra-singh-rajpurohit-bba28a115/",
+    "https://www.linkedin.com/in/kiran-shukla-995162ab/",
+    "https://www.linkedin.com/in/sirosh-satheesan-484146126/",
+    "https://www.linkedin.com/in/hieu-nguyen-719009178/",
+    "https://www.linkedin.com/in/hadiag/",
+    "https://www.linkedin.com/in/dinesh-bansal-a5458370/",
+    "https://www.linkedin.com/in/jayasurya-j-9572a2174/",
+    "https://www.linkedin.com/in/suprabhat-das-241958153/",
+    "https://www.linkedin.com/in/satwik-kasi-161600107/",
+    "https://www.linkedin.com/in/nga-ly-thi-ngoc-288393ba/",
+    "https://www.linkedin.com/in/swarna-varadaraman-5151b6a5/",
+    "https://www.linkedin.com/in/syed-shoaib-hussain-bb886121/",
+    "https://www.linkedin.com/in/abhishek-dey-a097881b/",
+    "https://www.linkedin.com/in/l%C3%A2m-quang-song-b943091b2/",
+    "https://www.linkedin.com/in/ajay-pal-380ab659/",
+    "https://www.linkedin.com/in/chauhan-bushan-a19bbb10/",
+    "https://www.linkedin.com/in/leminhan/",
+    "https://www.linkedin.com/in/arindam-basak-3bb9b11b9/",
+    "https://www.linkedin.com/in/srinu-nenavath-97970991/",
+    "https://www.linkedin.com/in/mantosh-singh-89457219/",
+    "https://www.linkedin.com/in/percythaipham/",
+    "https://www.linkedin.com/in/ram-sangeeth-32aa4812b/",
+    "https://www.linkedin.com/in/saptarshi-mandal-0a2627b8/",
+    "https://www.linkedin.com/in/satya-prakash-singh-11856510/",
+    "https://www.linkedin.com/in/paramjit-singh-424b8993/",
+    "https://www.linkedin.com/in/arenabangalore/",
+    "https://www.linkedin.com/in/dhanus-kumar-a29036124/",
+    "https://www.linkedin.com/in/sachin-prajapati-b1510163/",
+    "https://www.linkedin.com/in/pasang-lama-7b577a9a/",
+    "https://www.linkedin.com/in/dharmendra-singh-751b16a0/",
+    "https://www.linkedin.com/in/vijay-rana-34468229/",
+    "https://www.linkedin.com/in/harish-chandragopi-a4383416/",
+    "https://www.linkedin.com/in/nabiul-hadi-533659ba/",
+    "https://www.linkedin.com/in/amar-nadh-789080113/",
+]
+
+
+
+
+
+driver = webdriver.Chrome('C:\\Program Files\\chromedriver.exe')
+
+
+
+driver.get("https://www.linkedin.com/in/mujtabaalibhatti/")
+
+
+
+
+signin_btn = WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/main/div/div/form[2]/section/p/button")))
+signin_btn.click()
+
+
+   
+login_email = driver.find_element_by_id('login-email')
+login_email.send_keys('anasarshad297@gmail.com')
+
+
+login_password = driver.find_element_by_id('login-password')
+login_password.send_keys('Hacker51.@12')
+
+#
+submit_btn = WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/main/div/div/form[1]/button")))
+submit_btn.click()
+
+def loadJquery():
+    driver.execute_script("""var jq = document.createElement('script');
+    jq.src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js";
+    document.getElementsByTagName('head')[0].appendChild(jq);""")
+    time.sleep(1)
+
+
+
+
+
+
+# with open('profile_data.csv', mode='w') as csv_file:
+#     fieldnames = ['name', 'description', 'address','company','site','education','about','profile_information']
+#     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+#     writer.writeheader()
+   
+
+
+
+def fetch_data(idx = 0):
+   
+    print("fetching data outside")
+
+
+    time.sleep(4)
+
+    try:
+        driver.get(profile_links[idx])
+
+     
+        print("fetching data")
+
+        personal_info = WebDriverWait(driver, 40).until(
+                    EC.presence_of_element_located((By.CLASS_NAME, "pv-top-card__list-container")))
+
+        personal_info_data = personal_info.text.split('\n')
+
+        print('personal_info_data',personal_info_data)
+
+
+      
+        name = personal_info_data[0] if len(personal_info_data) > 0 else 'N/A'  
+        description = personal_info_data[1] if len(personal_info_data) > 1 else 'N/A'  
+        address = personal_info_data[2] if len(personal_info_data) > 2 else 'N/A'  
+        print(personal_info.text)
+
+        
+
+        edu_part = WebDriverWait(driver, 20).until(
+                    EC.presence_of_element_located((By.CLASS_NAME, "pv-top-card--experience-list")))
+        edu_part_data = edu_part.text.split('\n')
+
+
+
+        company = edu_part_data[0] if len(edu_part_data) > 0 else 'N/A'  
+        education = edu_part_data[1] if len(edu_part_data) > 1  else 'N/A'  
+        #website = edu_part_data[] 
+
+        print(edu_part.text)
+
+        site_element = edu_part.find_element_by_tag_name('a')
+
+        site_link = site_element.get_attribute('href')
+
+        print(site_link)
+
+
+        about_section = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, "pv-about-section")))
+      
+
+        
+        try:
+            driver.execute_script("document.querySelector('.pv-about-section #line-clamp-show-more-button').click()")
+        except:
+            pass
+
+
+        about_section = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, "pv-about-section")))
+
+        # print("about_section",about_section.text)
+
+        about = about_section.text.replace('About','')
+
+        time.sleep(3)
+
+       
+        driver.execute_script("""
+                window.scrollBy(0, 500); 
+            """)
+
+
+        time.sleep(3)
+
+        profile_section_text = 'N/A'
+
+        try:
+            profile_section_text = driver.find_element_by_id("experience-section").text
+        except:
+            pass
+            
+
+        print("profile_section",profile_section_text)
+
+
+        user_data = {
+            "name":name,
+            "description":description,
+            "address":address,
+            "company":company,
+            "site":site_link,
+            "education":education,
+            'about':about,
+            'profile_information' : profile_section_text
+        }
+
+
+
+        with open('profile_data.csv', mode='a', encoding='utf-8') as csv_file:
+            fieldnames = ['name', 'description', 'address','company','site','education','about','profile_information']
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            writer.writerow(user_data)
+           
+
+
+ 
+        fetch_data(idx + 1)
+
+    except Exception as e:
+        print("except running", str(e))
+        
+    finally:
+        driver.quit()
+
+fetch_data()
